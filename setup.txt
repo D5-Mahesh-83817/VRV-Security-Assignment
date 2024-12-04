@@ -1,0 +1,256 @@
+###  Project Setup Guide  ###
+
+This guide will help you set up and run the project on your local machine.
+
+
+
+##### Frontend Setup #####
+
+1. Open the **Frontend** folder in Visual Studio Code.
+2. Install the required dependencies:
+   
+   --- npm install
+
+Install additional packages:
+
+   --- npm install react react-dom react-router-dom
+
+   --- npm install react-toastify  axios jwt-decode
+  
+   --- npm install redux @reduxjs/toolkit react-redux
+ 
+
+** Install Material-UI **
+Material-UI (now MUI) can be installed using the following commands:
+
+Install the core Material-UI library:
+
+   --- npm install @mui/material @emotion/react @emotion/styled tailwindcss
+
+
+** Install Tailwind CSS via npm: **
+
+   --- npm install -D tailwindcss postcss autoprefixer
+
+** Install fontsource for Pacifico: **
+
+   --- npm install @fontsource/pacific
+
+
+3. Start the frontend application:
+
+   --- npm start
+
+
+
+##### Database Setup #####
+
+1. Open the MySQL Command Line Client.
+2. Create the database and use it:
+   ```
+     ---CREATE DATABASE airbnb_db;
+
+     ---USE airbnb_db;
+
+   ```
+3.Create the user table:
+   
+   ```
+   ---CREATE TABLE user (
+        id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        firstName VARCHAR(20),
+        lastName VARCHAR(20),
+        email VARCHAR(50),
+        password VARCHAR(100),
+        phoneNumber VARCHAR(15),
+        role VARCHAR(20),
+        isDeleted INTEGER(1) DEFAULT 0,
+        createdTimestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+     );
+   
+   ```
+4. Create property table:
+
+   ```
+   ---CREATE TABLE property (
+        id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        title VARCHAR(100),
+        details VARCHAR(1000),
+        address VARCHAR(1000),
+        contactNo VARCHAR(15),
+        contactName VARCHAR(50), 
+        isLakeView INTEGER(1) DEFAULT 0,
+        isTV INTEGER(1) DEFAULT 0,
+        isAC INTEGER(1) DEFAULT 0,
+        isWifi INTEGER(1) DEFAULT 0,
+        isMiniBar INTEGER(1) DEFAULT 0,
+        isBreakfast INTEGER(1) DEFAULT 0,
+        isParking INTEGER(1) DEFAULT 0,
+        guests INTEGER(1),
+        bedrooms INTEGER(1),
+        beds INTEGER(1),
+        bathrooms INTEGER(1),
+        rent FLOAT,
+        profileImage VARCHAR(100),
+        propertyType VARCHAR(50), 
+        managerId INTEGER,  
+        createdTimestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (managerId) REFERENCES user(id)
+     );
+
+    ```
+
+5. sample data for property
+
+    ```
+---INSERT INTO property (
+    title, 
+    details, 
+    address, 
+    contactNo, 
+    contactName, 
+    isLakeView, 
+    isTV, 
+    isAC, 
+    isWifi, 
+    isMiniBar, 
+    isBreakfast, 
+    isParking, 
+    guests, 
+    bedrooms, 
+    beds, 
+    bathrooms, 
+    rent, 
+    profileImage, 
+    propertyType, 
+    managerId
+) 
+VALUES
+-- Property 1
+(
+    'Lotus Serenity Villa',
+    'A serene villa located near the backwaters, perfect for a relaxing getaway.',
+    '123 Backwater Road, Kochi, Kerala, India',
+    '9876543210',
+    'Rajesh Kumar',
+    1, 1, 1, 1, 0, 1, 1,
+    6, 3, 4, 3,
+    8500.00,
+    'lotus_serenity.jpg',
+    'Villa',
+    NULL
+),
+-- Property 2
+(
+    'Himalayan Bliss Studio',
+    'Cozy studio with breathtaking views of the Himalayan range.',
+    '45 Mountain View Lane, Manali, Himachal Pradesh, India',
+    '8765432109',
+    'Anjali Sharma',
+    1, 1, 1, 1, 0, 1, 1,
+    2, 1, 1, 1,
+    3500.00,
+    'himalayan_bliss.jpg',
+    'Studio',
+    NULL
+),
+-- Property 3
+(
+    'Mumbai Cityscape Apartment',
+    'Modern apartment with stunning views of the Mumbai skyline.',
+    '7th Floor, Skyline Tower, Bandra West, Mumbai, Maharashtra, India',
+    '7654321098',
+    'Suresh Mehta',
+    0, 1, 1, 1, 0, 0, 1,
+    4, 2, 2, 2,
+    12000.00,
+    'mumbai_cityscape.jpg',
+    'Apartment',
+    NULL
+),
+-- Property 4
+(
+    'Heritage Haveli Jaipur',
+    'Luxurious haveli with royal interiors and modern amenities.',
+    '17 Pink City Lane, Jaipur, Rajasthan, India',
+    '6543210987',
+    'Pooja Singh',
+    0, 1, 1, 1, 1, 1, 1,
+    10, 5, 6, 5,
+    25000.00,
+    'heritage_haveli.jpg',
+    'Commercial',
+    NULL
+),
+-- Property 5
+(
+    'Goa Beachside Paradise',
+    'Beachside villa with direct access to the sand and sea.',
+    '21 Ocean View Drive, Calangute, Goa, India',
+    '5432109876',
+    'Ravi Desai',
+    1, 1, 1, 1, 1, 1, 1,
+    8, 4, 5, 3,
+    18000.00,
+    'goa_paradise.jpg',
+    'Villa',
+    NULL
+);
+   
+   ```
+
+
+
+##### Backend Setup #####
+
+Open the backend folder in Visual Studio Code.
+1. Install the required dependencies:
+
+ -- npm install
+
+2. Install additional global and project-specific packages:
+
+ -- npm install -g nodemon
+ -- npm install express cors jsonwebtoken crypto-js
+
+3. *** Update the db.js file with your MySQL username and password for the database connection. ***        ### important ###
+
+4. Start the backend server in VS code terminal or cmd prompt:
+
+  -- nodemon server.js
+          or
+  -- npm start
+
+5. The backend will now be running on http://localhost:4000.
+Project Overview
+
+Summary -
+
+The frontend is built using React and includes functionality such as routing, toast notifications, and API calls using Axios.
+The backend is powered by Node.js with Express and uses MySQL for database management.
+
+Role-Based Access Control (RBAC) is implemented to manage user permissions effectively.
+Follow these steps to set up the project and start developing!
+
+
+
+To thoroughly test the application's functionality, perform the following steps:
+
+
+1. Register users with different roles (e.g., Admin, Manager, and User) by providing the necessary role-specific details during the registration process.
+
+2. Verify the registration process for each role and ensure that the correct roles are assigned to the users in the database.
+
+3. Log in as each type of user and test the features and permissions associated with their role.
+  For example:
+  -- Admin: Ensure they can manage users, assign roles, and oversee hotels or tasks.
+  -- Manager: Verify they can manage assigned hotels, handle bookings, and complete specific tasks.
+  -- User: Confirm they can browse hotels, view available options, and successfully book a hotel.
+
+4. Test role-based access control (RBAC) by attempting actions that are restricted to specific roles (e.g., ensure a User cannot access Admin or Manager functionalities).
+
+5. Perform edge-case testing, such as attempting to register with invalid inputs, duplicate usernames or emails, or without specifying a role.
+
+6. Check if booked hotels are no longer available for others and verify that only available hotels are displayed for booking.
+
+7. Confirm the functionality of error messages, validation feedback, and successful operation notifications throughout the application."
