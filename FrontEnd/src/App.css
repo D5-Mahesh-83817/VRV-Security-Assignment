@@ -1,0 +1,53 @@
+.car {
+  display: inline-block;
+  margin: 10px;
+  padding: 20px;
+  border: 1px gray solid;
+  border-radius: 10px;
+}
+/* Custom toast styles */
+.custom-toast {
+  background-color: #002839 !important; /* Dark blue background */
+  color: #f0f9f9 !important; /* Light text color */
+}
+
+.custom-toast-success {
+  background-color: #002839 !important; /* Dark blue for success */
+  color: #f0f9f9 !important;
+}
+
+.custom-toast-error {
+  background-color: #002839 !important; /* Red for error */
+  color: #f0f9f9 !important;
+}
+
+/* Change background color of warning toast */
+.Toastify__toast--warning {
+  background-color: #002839 !important; /* Dark blue background for warning toast */
+}
+
+/* Change exclamation mark color in warning toast */
+.Toastify__toast--warning .Toastify__toast-icon--warning {
+  color: #ff9800 !important; /* Orange color for warning icon */
+}
+
+/* Change the color of the close (cancel) button */
+.Toastify__toast--warning .Toastify__close-button {
+  color: #eaf9ff !important; /* Light blue cancel button color */
+}
+.Toastify__toast--error .Toastify__close-button {
+  color: #eaf9ff !important; /* Light blue cancel button color */
+}
+.Toastify__toast--success .Toastify__close-button {
+  color: #eaf9ff !important; /* Light blue cancel button color */
+}
+
+/* Change the text color of the warning toast */
+.custom-toast-body {
+  color: #eaf9ff !important; /* Light text color for the warning toast */
+}
+
+/* Optional: Change progress bar for warning toast */
+.custom-toast-progress {
+  background-color: #ff9800 !important; /* Orange progress bar */
+}
