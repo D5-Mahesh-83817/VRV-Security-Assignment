@@ -195,7 +195,7 @@ function PropertyTable() {
                     })
                   }
                 >
-                  Edit
+                  Update
                 </Button>
               </TableCell>
               <TableCell sx={{ textAlign: "center" }}>
@@ -234,6 +234,7 @@ function PropertyTable() {
           fontWeight: "bold",
           backgroundColor: "#ff9800",
           color: "#fff",
+          borderRadius: "12px",
           "&:hover": {
             backgroundColor: "#e68900",
           },

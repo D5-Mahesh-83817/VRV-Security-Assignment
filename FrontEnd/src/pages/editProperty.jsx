@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { updateProperty, getPropertyDetails } from "../services/property";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { getPropertyDetails, updateProperty } from "../services/property";
 import { toast } from "react-toastify";
 import {
   Box,
@@ -27,6 +27,8 @@ const theme = createTheme({
 
 function EditProperty() {
   const { id } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [property, setProperty] = useState({
     title: "",
     contactName: "",
@@ -35,24 +37,23 @@ function EditProperty() {
     rent: "",
     propertyType: "",
   });
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProperty = async () => {
-      setLoading(true);
-      try {
-        const data = await getPropertyDetails(id);
-        setProperty(data);
-      } catch (error) {
-        toast.error("Error fetching property details");
-        console.error("Error fetching property:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProperty();
-  }, [id]);
+    if (location.state?.property) {
+      setProperty(location.state.property);
+    } else {
+      const fetchProperty = async () => {
+        try {
+          const data = await getPropertyDetails(id);
+          setProperty(data);
+        } catch (error) {
+          toast.error("Error fetching property details");
+          console.error("Error fetching property:", error);
+        }
+      };
+      fetchProperty();
+    }
+  }, [id, location.state]);
 
   const updateExistingProperty = async () => {
     if (
@@ -67,7 +68,6 @@ function EditProperty() {
       return;
     }
 
-    setLoading(true);
     try {
       const result = await updateProperty(id, property);
       if (result.status === "success") {
@@ -79,8 +79,6 @@ function EditProperty() {
     } catch (error) {
       toast.error("An error occurred while updating the property");
       console.error("Error updating property:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -255,7 +253,6 @@ function EditProperty() {
                 color="primary"
                 onClick={updateExistingProperty}
                 fullWidth
-                disabled={loading}
                 sx={{
                   padding: "0.8rem",
                   fontSize: "1rem",
@@ -268,7 +265,7 @@ function EditProperty() {
                   },
                 }}
               >
-                {loading ? "Updating..." : "Update Property"}
+                Update Property
               </Button>
             </Grid>
           </Grid>

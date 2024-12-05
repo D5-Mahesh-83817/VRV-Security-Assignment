@@ -48,10 +48,20 @@ const LoginUser = () => {
       try {
         const result = await login(email, password);
         if (result.status === "success") {
-          const { token, name, role } = result.data;
+          const { token, name, role, isActive } = result.data;
+
+          if (!isActive) {
+            toast.error("Your account is inactive. Please contact support.", {
+              className: "custom-toast custom-toast-error",
+              bodyClassName: "custom-toast-body",
+            });
+            return;
+          }
+
           sessionStorage.setItem("token", token);
           sessionStorage.setItem("name", name);
           sessionStorage.setItem("role", role);
+          sessionStorage.setItem("isActive", isActive);
 
           if (role === "Admin") {
             navigate("/admin");
@@ -60,6 +70,7 @@ const LoginUser = () => {
           } else {
             navigate("/home");
           }
+
           toast.success(`Welcome, ${name}`, {
             className: "custom-toast custom-toast-success",
             bodyClassName: "custom-toast-body",

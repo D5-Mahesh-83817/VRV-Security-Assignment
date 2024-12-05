@@ -29,7 +29,7 @@ function App() {
   return (
     <div>
       <Routes>
-        {/* <Route path="/" element={<LoginUser />} /> */}
+        <Route path="/" element={<LoginUser />} />
         <Route path="/login" element={<LoginUser />} />
         <Route path="/register" element={<RegisterUser />} />
         <Route path="/unauthorized" element={<UnauthorizedAccessPage />} />

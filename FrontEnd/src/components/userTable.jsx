@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAllUsers, deleteUser } from "../services/user";
 import { toast } from "react-toastify";
+import { updateAccountStatus } from "../services/user";
 import {
   Button,
   Table,
@@ -54,16 +55,46 @@ function UserTable() {
     }
   };
 
-  const toggleStatus = async (userId, isActive) => {
-    const newStatus = !isActive;
-    setUsers(
-      users.map((user) =>
-        user.id === userId ? { ...user, isActive: newStatus } : user
-      )
-    );
-    toast.success(
-      `User ${newStatus ? "activated" : "deactivated"} successfully.`
-    );
+  const toggleStatus = async (userId, currentStatus) => {
+    const newStatus = currentStatus === 1 ? 0 : 1;
+
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) {
+        toast.error("Authentication token not found. Please log in again.", {
+          className: "custom-toast custom-toast-error",
+          bodyClassName: "custom-toast-body",
+        });
+        return;
+      }
+
+      const response = await updateAccountStatus(token, userId, newStatus);
+
+      if (response.status === "success") {
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.id === userId ? { ...user, isAccountActive: newStatus } : user
+          )
+        );
+        toast.success(
+          `User account ${
+            newStatus === 1 ? "activated" : "deactivated"
+          } successfully.`,
+          {
+            className: "custom-toast custom-toast-success",
+            bodyClassName: "custom-toast-body",
+          }
+        );
+      } else {
+        toast.error(response.message || "Failed to update user status.");
+      }
+    } catch (error) {
+      console.error("Error toggling account status:", error);
+      toast.error("An error occurred while updating account status.", {
+        className: "custom-toast custom-toast-error",
+        bodyClassName: "custom-toast-body",
+      });
+    }
   };
 
   return (
@@ -187,25 +218,31 @@ function UserTable() {
               <TableCell sx={{ textAlign: "center" }}>
                 <Button
                   variant="outlined"
-                  color={user.isActive ? "error" : "success"}
+                  color={user.isAccountActive ? "error" : "success"}
                   fullWidth
                   sx={{
                     padding: "0.6rem",
                     fontSize: "0.8rem",
                     fontWeight: "bold",
                     borderColor: "#002839",
-                    backgroundColor: user.isActive ? "#ff9800" : "#002839",
-                    color: user.isActive ? "#002839" : "#ff9800",
+                    backgroundColor: user.isAccountActive
+                      ? "#002839"
+                      : "#ff9800",
+                    color: user.isAccountActive ? "#ff9800" : "#002839",
+                    transition: "background-color 0.3s, color 0.3s",
                     "&:hover": {
-                      backgroundColor: user.isActive ? "#f44336" : "#006a4e",
+                      backgroundColor: user.isAccountActive
+                        ? "#f44336"
+                        : "#006a4e",
                       color: "#fff",
                     },
                   }}
-                  onClick={() => toggleStatus(user.id, user.isActive)}
+                  onClick={() => toggleStatus(user.id, user.isAccountActive)}
                 >
-                  {user.isActive ? "Deactivate" : "Activate"}
+                  {user.isAccountActive ? "Deactivate" : "Activate"}
                 </Button>
               </TableCell>
+
               <TableCell sx={{ textAlign: "center" }}>
                 <Button
                   variant="outlined"

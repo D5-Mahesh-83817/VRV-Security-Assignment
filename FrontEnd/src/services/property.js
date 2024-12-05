@@ -4,107 +4,105 @@ import config from "../config";
 // Get all properties
 export async function getProperties() {
   const token = sessionStorage.getItem("token");
+
   const response = await axios.get(`${config.url}/property/`, {
     headers: {
       token: token,
     },
   });
+
   return response.data;
 }
 
 // Get property details by ID
 export async function getPropertyDetails(id) {
   const token = sessionStorage.getItem("token");
+  console.log(1);
   const response = await axios.get(`${config.url}/property/details/${id}`, {
     headers: {
       token: token,
     },
   });
+  console.log(response.data);
   return response.data;
 }
 
-// Add a new property
+//add new property
 export async function addProperty(
   title,
-  details,
   contactName,
   contactNo,
   address,
   rent,
-  propertyType,
-  managerId,
-  profileImage
+  propertyType
 ) {
   const token = sessionStorage.getItem("token");
 
   const body = {
     title,
-    details,
-    rent,
+    details: "",
     address,
     contactNo,
     contactName,
     isLakeView: 0,
-    isTV: 1,
-    isAC: 1,
-    isWifi: 1,
+    isTV: 0,
+    isAC: 0,
+    isWifi: 0,
     isMiniBar: 0,
-    isBreakfast: 1,
-    isParking: 1,
-    guests: 3,
-    bedrooms: 2,
-    beds: 2,
-    bathrooms: 1,
+    isBreakfast: 0,
+    isParking: 0,
+    guests: 0,
+    bedrooms: 0,
+    beds: 0,
+    bathrooms: 0,
+    rent,
     propertyType,
-    managerId,
-    profileImage,
   };
 
-  const response = await axios.post(`${config.url}/property`, body, {
-    headers: {
-      token,
-    },
-  });
-  return response.data;
+  try {
+    const response = await axios.post(`${config.url}/property/`, body, {
+      headers: {
+        token: token,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error adding property:", error.message);
+    throw error;
+  }
 }
 
 // Update a property
 export async function updateProperty(
   id,
   title,
-  details,
   contactName,
   contactNumber,
   address,
   rent,
-  propertyType,
-  managerId,
-  profileImage,
-  features
+  propertyType
 ) {
   const token = sessionStorage.getItem("token");
 
   const body = {
     title,
-    details,
+    details: "",
     rent,
     address,
     contactNo: contactNumber,
     contactName,
-    isLakeView: features?.isLakeView || 0,
-    isTV: features?.isTV || 0,
-    isAC: features?.isAC || 0,
-    isWifi: features?.isWifi || 0,
-    isMiniBar: features?.isMiniBar || 0,
-    isBreakfast: features?.isBreakfast || 0,
-    isParking: features?.isParking || 0,
-    guests: features?.guests || 1,
-    bedrooms: features?.bedrooms || 1,
-    beds: features?.beds || 1,
-    bathrooms: features?.bathrooms || 1,
+    isLakeView: 0,
+    isTV: 0,
+    isAC: 0,
+    isWifi: 0,
+    isMiniBar: 0,
+    isBreakfast: 0,
+    isParking: 0,
+    guests: 1,
+    bedrooms: 1,
+    beds: 1,
+    bathrooms: 1,
     propertyType,
-    managerId,
-    profileImage,
   };
 
   const response = await axios.put(`${config.url}/property/${id}`, body, {
@@ -120,7 +118,7 @@ export async function deleteProperty(id) {
   const token = sessionStorage.getItem("token");
   const response = await axios.delete(`${config.url}/property/${id}`, {
     headers: {
-      token,
+      token: token,
     },
   });
   return response.data;
@@ -139,7 +137,7 @@ export async function assignManager(propertyId, managerId) {
     body,
     {
       headers: {
-        token,
+        token: token,
       },
     }
   );

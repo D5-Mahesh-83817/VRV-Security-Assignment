@@ -65,6 +65,7 @@ Install the core Material-UI library:
         phoneNumber VARCHAR(15),
         role VARCHAR(20),
         isDeleted INTEGER(1) DEFAULT 0,
+        isAccountActive INTEGER(1) DEFAULT 1,
         createdTimestamp DATETIME DEFAULT CURRENT_TIMESTAMP
      );
    
@@ -91,7 +92,6 @@ Install the core Material-UI library:
         beds INTEGER(1),
         bathrooms INTEGER(1),
         rent FLOAT,
-        profileImage VARCHAR(100),
         propertyType VARCHAR(50), 
         managerId INTEGER,  
         createdTimestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -121,7 +121,6 @@ Install the core Material-UI library:
     beds, 
     bathrooms, 
     rent, 
-    profileImage, 
     propertyType, 
     managerId
 ) 
@@ -136,7 +135,6 @@ VALUES
     1, 1, 1, 1, 0, 1, 1,
     6, 3, 4, 3,
     8500.00,
-    'lotus_serenity.jpg',
     'Villa',
     NULL
 ),
@@ -150,7 +148,6 @@ VALUES
     1, 1, 1, 1, 0, 1, 1,
     2, 1, 1, 1,
     3500.00,
-    'himalayan_bliss.jpg',
     'Studio',
     NULL
 ),
@@ -164,7 +161,6 @@ VALUES
     0, 1, 1, 1, 0, 0, 1,
     4, 2, 2, 2,
     12000.00,
-    'mumbai_cityscape.jpg',
     'Apartment',
     NULL
 ),
@@ -178,7 +174,6 @@ VALUES
     0, 1, 1, 1, 1, 1, 1,
     10, 5, 6, 5,
     25000.00,
-    'heritage_haveli.jpg',
     'Commercial',
     NULL
 ),
@@ -192,7 +187,6 @@ VALUES
     1, 1, 1, 1, 1, 1, 1,
     8, 4, 5, 3,
     18000.00,
-    'goa_paradise.jpg',
     'Villa',
     NULL
 );

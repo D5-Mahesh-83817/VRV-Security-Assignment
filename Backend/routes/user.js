@@ -28,9 +28,9 @@ router.post("/register", (request, response) => {
 router.post("/login", (request, response) => {
   const { email, password } = request.body;
   const statement = `
-    SELECT id, firstName, lastName, phoneNumber, isDeleted, role 
+    SELECT id, firstName, lastName, phoneNumber, isDeleted, role, isAccountActive
     FROM user 
-    WHERE email = ? AND password = ?;
+    WHERE email = ? AND password = ? ;
   `;
   const encryptedPassword = String(crypto.SHA256(password));
   db.pool.query(statement, [email, encryptedPassword], (error, users) => {
@@ -51,6 +51,7 @@ router.post("/login", (request, response) => {
             token,
             name: `${user.firstName} ${user.lastName}`,
             role: user.role, // Added role in response
+            isActive: user.isAccountActive,
           };
           response.send(utils.createSuccessResult(userData));
         }
@@ -61,7 +62,7 @@ router.post("/login", (request, response) => {
 
 router.get("/", (request, response) => {
   const statement = `
-    SELECT id, firstName, lastName, email, phoneNumber, role, isDeleted 
+    SELECT id, firstName, lastName, email, phoneNumber, role, isDeleted, isAccountActive 
     FROM user 
     WHERE isDeleted = 0;
   `;
@@ -71,7 +72,7 @@ router.get("/", (request, response) => {
       console.error("Database query failed:", error);
       response.status(500).send({ status: "error", message: error.message });
     } else {
-      console.log("Query successful:", users);
+      // console.log("Query successful:", users);
       response.send(utils.createResult(null, users));
     }
   });
@@ -114,7 +115,6 @@ router.put("/update/:id", (req, res) => {
 
 router.delete("/delete/:id", (req, res) => {
   const { id } = req.params;
-  console.log("5");
 
   const statement = `DELETE FROM user WHERE id = ?`;
 
@@ -128,6 +128,38 @@ router.delete("/delete/:id", (req, res) => {
       res.status(404).send({ status: "error", message: "User not found" });
     } else {
       res.send({ status: "success", message: "User deleted successfully" });
+    }
+  });
+});
+
+router.patch("/account/:id", (req, res) => {
+  const { id } = req.params; // Extract the user ID from the URL
+  const { isActive } = req.body; // Extract the active status (1 or 0) from the request body
+
+  // Validate isActive
+  if (typeof isActive !== "number" || ![0, 1].includes(isActive)) {
+    return res.status(400).send({
+      status: "error",
+      message:
+        "Invalid value for isActive. Use 1 for active and 0 for inactive.",
+    });
+  }
+
+  const statement = `UPDATE user SET isAccountActive = ? WHERE id = ?`;
+
+  db.pool.query(statement, [isActive, id], (error, result) => {
+    if (error) {
+      console.error("Error updating account status:", error);
+      res
+        .status(500)
+        .send({ status: "error", message: "Failed to update account status" });
+    } else if (result.affectedRows === 0) {
+      res.status(404).send({ status: "error", message: "User not found" });
+    } else {
+      const statusMessage = isActive
+        ? "Account activated successfully"
+        : "Account deactivated successfully";
+      res.send({ status: "success", message: statusMessage });
     }
   });
 });

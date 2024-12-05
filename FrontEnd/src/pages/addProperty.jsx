@@ -46,7 +46,7 @@ function AddProperty() {
     );
     if (result["status"] === "success") {
       toast.success("Property added successfully!");
-      navigate("/home");
+      navigate("/admin");
     } else {
       toast.error(result["error"]);
     }

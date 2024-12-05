@@ -28,9 +28,7 @@ export async function login(email, password) {
     email,
     password,
   };
-
   const response = await axios.post(`${config.url}/user/login`, body);
-
   return response.data;
 }
 
@@ -76,5 +74,23 @@ export const deleteUser = async (token, userId) => {
   } catch (error) {
     console.error("Error deleting user:", error);
     return { status: "error", message: "Failed to delete user" };
+  }
+};
+
+export const updateAccountStatus = async (token, userId, isActive) => {
+  try {
+    const response = await axios.patch(
+      `${config.url}/user/account/${userId}`,
+      { isActive }, // Sending the isActive value in the request body
+      {
+        headers: {
+          token: token, // Passing the authentication token in headers
+        },
+      }
+    );
+    return response.data; // Returning the response data
+  } catch (error) {
+    console.error("Error updating account status:", error);
+    return { status: "error", message: "Failed to update account status" }; // Returning a consistent error response
   }
 };

@@ -24,17 +24,15 @@ router.post("/", (request, response) => {
     bathrooms,
     rent,
     propertyType,
-    managerId,
-    profileImage,
   } = request.body;
 
   const query = `
     INSERT INTO property (
       title, details, address, contactNo, contactName, isLakeView, isTV, 
       isAC, isWifi, isMiniBar, isBreakfast, isParking, guests, bedrooms, 
-      beds, bathrooms, rent, propertyType, managerId, profileImage
+      beds, bathrooms, rent, propertyType
     ) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
   `;
   db.pool.execute(
     query,
@@ -57,8 +55,6 @@ router.post("/", (request, response) => {
       bathrooms,
       rent,
       propertyType,
-      managerId,
-      profileImage,
     ],
     (error, result) => {
       response.send(utils.createResult(error, result));
@@ -70,7 +66,7 @@ router.post("/", (request, response) => {
 router.get("/", (request, response) => {
   const query = `
     SELECT id, title, details, address, rent, propertyType, 
-           managerId, profileImage, contactNo, contactName
+           managerId, contactNo, contactName
     FROM property;
   `;
   db.pool.query(query, (error, properties) => {
@@ -109,8 +105,6 @@ router.put("/:id", (request, response) => {
     bathrooms,
     rent,
     propertyType,
-    managerId,
-    profileImage,
   } = request.body;
 
   const query = `
@@ -118,7 +112,7 @@ router.put("/:id", (request, response) => {
     SET title = ?, details = ?, address = ?, contactNo = ?, contactName = ?, 
         isLakeView = ?, isTV = ?, isAC = ?, isWifi = ?, isMiniBar = ?, 
         isBreakfast = ?, isParking = ?, guests = ?, bedrooms = ?, beds = ?, 
-        bathrooms = ?, rent = ?, propertyType = ?, managerId = ?, profileImage = ? 
+        bathrooms = ?, rent = ?, propertyType = ?
     WHERE id = ?;
   `;
   db.pool.execute(
@@ -142,8 +136,6 @@ router.put("/:id", (request, response) => {
       bathrooms,
       rent,
       propertyType,
-      managerId,
-      profileImage,
       id,
     ],
     (error, result) => {
