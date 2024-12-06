@@ -4,7 +4,7 @@ import LoginUser from "./pages/login";
 import RegisterUser from "./pages/register";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import EditUserForm from "./pages/edit";
+import EditUserForm from "./pages/editUser.jsx";
 import AddProperty from "./pages/addProperty";
 import AdminDashboard from "./pages/adminDashboard.jsx";
 import EditProperty from "./pages/editProperty.jsx";

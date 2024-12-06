@@ -27,21 +27,28 @@ const theme = createTheme({
 
 function EditProperty() {
   const { id } = useParams();
-  const location = useLocation();
+  const { state } = useLocation();
   const navigate = useNavigate();
-  const [property, setProperty] = useState({
-    title: "",
-    contactName: "",
-    address: "",
-    contactNumber: "",
-    rent: "",
-    propertyType: "",
-  });
+  const token = sessionStorage.getItem("token");
+
+  const [property, setProperty] = useState(
+    state?.property || {
+      title: "",
+      contactName: "",
+      address: "",
+      contactNo: "",
+      rent: "",
+      propertyType: "",
+    }
+  );
 
   useEffect(() => {
-    if (location.state?.property) {
-      setProperty(location.state.property);
-    } else {
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    if (!state?.property) {
       const fetchProperty = async () => {
         try {
           const data = await getPropertyDetails(id);
@@ -53,14 +60,20 @@ function EditProperty() {
       };
       fetchProperty();
     }
-  }, [id, location.state]);
+  }, [id, state, token, navigate]);
 
-  const updateExistingProperty = async () => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProperty((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (
       !property.title ||
       !property.contactName ||
       !property.address ||
-      !property.contactNumber ||
+      !property.contactNo ||
       !property.rent ||
       !property.propertyType
     ) {
@@ -69,12 +82,19 @@ function EditProperty() {
     }
 
     try {
-      const result = await updateProperty(id, property);
+      console.log(property);
+      const result = await updateProperty(token, property);
       if (result.status === "success") {
-        toast.success("Property updated successfully!");
-        navigate("/propertyTable");
+        toast.success("Property updated successfully!", {
+          className: "custom-toast custom-toast-success",
+          bodyClassName: "custom-toast-body",
+        });
+        navigate("/admin");
       } else {
-        toast.error(result.error || "Error updating property");
+        toast.error(result.message || "Failed to update property", {
+          className: "custom-toast custom-toast-error",
+          bodyClassName: "custom-toast-body",
+        });
       }
     } catch (error) {
       toast.error("An error occurred while updating the property");
@@ -125,9 +145,7 @@ function EditProperty() {
                 variant="outlined"
                 label="Title"
                 value={property.title}
-                onChange={(e) =>
-                  setProperty({ ...property, title: e.target.value })
-                }
+                onChange={handleChange}
                 InputProps={{ style: { color: "#fff" } }}
                 InputLabelProps={{ style: { color: "#ccc" } }}
                 sx={{
@@ -145,9 +163,7 @@ function EditProperty() {
                 variant="outlined"
                 label="Contact Name"
                 value={property.contactName}
-                onChange={(e) =>
-                  setProperty({ ...property, contactName: e.target.value })
-                }
+                onChange={handleChange}
                 InputProps={{ style: { color: "#fff" } }}
                 InputLabelProps={{ style: { color: "#ccc" } }}
                 sx={{
@@ -165,10 +181,8 @@ function EditProperty() {
                 variant="outlined"
                 label="Contact Number"
                 type="tel"
-                value={property.contactNumber}
-                onChange={(e) =>
-                  setProperty({ ...property, contactNumber: e.target.value })
-                }
+                value={property.contactNo}
+                onChange={handleChange}
                 InputProps={{ style: { color: "#fff" } }}
                 InputLabelProps={{ style: { color: "#ccc" } }}
                 sx={{
@@ -186,9 +200,7 @@ function EditProperty() {
                 variant="outlined"
                 label="Address"
                 value={property.address}
-                onChange={(e) =>
-                  setProperty({ ...property, address: e.target.value })
-                }
+                onChange={handleChange}
                 InputProps={{ style: { color: "#fff" } }}
                 InputLabelProps={{ style: { color: "#ccc" } }}
                 sx={{
@@ -207,9 +219,7 @@ function EditProperty() {
                 label="Rent"
                 type="number"
                 value={property.rent}
-                onChange={(e) =>
-                  setProperty({ ...property, rent: e.target.value })
-                }
+                onChange={handleChange}
                 InputProps={{ style: { color: "#fff" } }}
                 InputLabelProps={{ style: { color: "#ccc" } }}
                 sx={{
@@ -227,9 +237,8 @@ function EditProperty() {
                 variant="outlined"
                 label="Property Type"
                 value={property.propertyType}
-                onChange={(e) =>
-                  setProperty({ ...property, propertyType: e.target.value })
-                }
+                name="propertyType" // Add the name attribute here
+                onChange={handleChange}
                 select
                 InputProps={{ style: { color: "#fff" } }}
                 InputLabelProps={{ style: { color: "#ccc" } }}
@@ -241,9 +250,11 @@ function EditProperty() {
                   },
                 }}
               >
-                <MenuItem value="Apartment">Apartment</MenuItem>
-                <MenuItem value="Villa">Villa</MenuItem>
-                <MenuItem value="Office">Office</MenuItem>
+                {["Apartment", "Villa", "Office"].map((type) => (
+                  <MenuItem key={type} value={type}>
+                    {type}
+                  </MenuItem>
+                ))}
               </TextField>
             </Grid>
 
@@ -251,7 +262,7 @@ function EditProperty() {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={updateExistingProperty}
+                onClick={handleSubmit}
                 fullWidth
                 sx={{
                   padding: "0.8rem",

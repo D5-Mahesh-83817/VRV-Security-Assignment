@@ -60,7 +60,7 @@ function PropertyTable() {
 
   return (
     <div className="container">
-      <Table className="shadow-lg border border-gray-300 ">
+      <Table className="shadow-lg border border-gray-300 rounded-xl">
         <TableHead sx={{ backgroundColor: "#002839" }}>
           <TableRow>
             <TableCell
@@ -131,7 +131,7 @@ function PropertyTable() {
                 textTransform: "uppercase",
               }}
             >
-              Edit
+              Update Property
             </TableCell>
             <TableCell
               sx={{

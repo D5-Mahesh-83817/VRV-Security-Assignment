@@ -73,43 +73,19 @@ export async function addProperty(
 }
 
 // Update a property
-export async function updateProperty(
-  id,
-  title,
-  contactName,
-  contactNumber,
-  address,
-  rent,
-  propertyType
-) {
-  const token = sessionStorage.getItem("token");
+export async function updateProperty(token, property) {
+  // console.log(id, title, contactName, contactNo, address, rent, propertyType);
 
-  const body = {
-    title,
-    details: "",
-    rent,
-    address,
-    contactNo: contactNumber,
-    contactName,
-    isLakeView: 0,
-    isTV: 0,
-    isAC: 0,
-    isWifi: 0,
-    isMiniBar: 0,
-    isBreakfast: 0,
-    isParking: 0,
-    guests: 1,
-    bedrooms: 1,
-    beds: 1,
-    bathrooms: 1,
-    propertyType,
-  };
-
-  const response = await axios.put(`${config.url}/property/${id}`, body, {
-    headers: {
-      token,
-    },
-  });
+  const response = await axios.put(
+    `${config.url}/property/${property.id}`,
+    property,
+    {
+      headers: {
+        token: token,
+      },
+    }
+  );
+  console.log(response.data);
   return response.data;
 }
 

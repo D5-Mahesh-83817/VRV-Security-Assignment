@@ -86,58 +86,19 @@ router.get("/details/:id", (request, response) => {
 // Update a property
 router.put("/:id", (request, response) => {
   const { id } = request.params;
-  const {
-    title,
-    details,
-    address,
-    contactNo,
-    contactName,
-    isLakeView,
-    isTV,
-    isAC,
-    isWifi,
-    isMiniBar,
-    isBreakfast,
-    isParking,
-    guests,
-    bedrooms,
-    beds,
-    bathrooms,
-    rent,
-    propertyType,
-  } = request.body;
-
+  const { title, address, contactNo, contactName, rent, propertyType } =
+    request.body;
+  console.log(title, address, contactNo, contactName, rent, propertyType);
+  console.log(typeof rent, typeof contactNo, typeof propertyType);
   const query = `
     UPDATE property 
-    SET title = ?, details = ?, address = ?, contactNo = ?, contactName = ?, 
-        isLakeView = ?, isTV = ?, isAC = ?, isWifi = ?, isMiniBar = ?, 
-        isBreakfast = ?, isParking = ?, guests = ?, bedrooms = ?, beds = ?, 
-        bathrooms = ?, rent = ?, propertyType = ?
+    SET title = ?, address = ?, contactNo = ?, contactName = ?, 
+         rent = ?, propertyType = ?
     WHERE id = ?;
   `;
   db.pool.execute(
     query,
-    [
-      title,
-      details,
-      address,
-      contactNo,
-      contactName,
-      isLakeView,
-      isTV,
-      isAC,
-      isWifi,
-      isMiniBar,
-      isBreakfast,
-      isParking,
-      guests,
-      bedrooms,
-      beds,
-      bathrooms,
-      rent,
-      propertyType,
-      id,
-    ],
+    [title, address, contactNo, contactName, rent, propertyType, id],
     (error, result) => {
       response.send(utils.createResult(error, result));
     }
