@@ -78,6 +78,24 @@ router.get("/", (request, response) => {
   });
 });
 
+router.get("/managers", (request, response) => {
+  const statement = `
+    SELECT id, firstName, lastName, email, phoneNumber, role, isDeleted, isAccountActive 
+    FROM user 
+    WHERE isDeleted = 0 and role = Manager;
+  `;
+
+  db.pool.query(statement, (error, users) => {
+    if (error) {
+      console.error("Database query failed:", error);
+      response.status(500).send({ status: "error", message: error.message });
+    } else {
+      // console.log("Query successful:", users);
+      response.send(utils.createResult(null, users));
+    }
+  });
+});
+
 router.put("/update/:id", (req, res) => {
   const { id } = req.params;
   const { firstName, lastName, email, phoneNumber } = req.body;

@@ -144,6 +144,7 @@ function EditProperty() {
                 fullWidth
                 variant="outlined"
                 label="Title"
+                name="title"
                 value={property.title}
                 onChange={handleChange}
                 InputProps={{ style: { color: "#fff" } }}
@@ -162,6 +163,7 @@ function EditProperty() {
                 fullWidth
                 variant="outlined"
                 label="Contact Name"
+                name="contactName"
                 value={property.contactName}
                 onChange={handleChange}
                 InputProps={{ style: { color: "#fff" } }}
@@ -181,6 +183,7 @@ function EditProperty() {
                 variant="outlined"
                 label="Contact Number"
                 type="tel"
+                name="contactNo"
                 value={property.contactNo}
                 onChange={handleChange}
                 InputProps={{ style: { color: "#fff" } }}
@@ -199,6 +202,7 @@ function EditProperty() {
                 fullWidth
                 variant="outlined"
                 label="Address"
+                name="address"
                 value={property.address}
                 onChange={handleChange}
                 InputProps={{ style: { color: "#fff" } }}
@@ -218,6 +222,7 @@ function EditProperty() {
                 variant="outlined"
                 label="Rent"
                 type="number"
+                name="rent"
                 value={property.rent}
                 onChange={handleChange}
                 InputProps={{ style: { color: "#fff" } }}

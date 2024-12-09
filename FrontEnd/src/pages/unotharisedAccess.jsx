@@ -7,6 +7,12 @@ const UnauthorizedAccessPage = () => {
 
   const handleGoBackHome = () => {
     const role = sessionStorage.getItem("role");
+    const token = sessionStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
     if (role === "Manager") {
       navigate("/manager");
     } else {
